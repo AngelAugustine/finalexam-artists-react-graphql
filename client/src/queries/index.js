@@ -1,5 +1,41 @@
 import { gql } from 'apollo-boost'
 
+export const GET_INSTRUMENTS  = gql`
+  {
+    instruments {
+    id
+    year
+    brand
+    type
+    price
+    artistId
+    }
+  }
+`
+
+export const ADD_INSTRUMENTS = gql`
+  mutation AddInstruments($id: String!,
+    $year: String!,
+    $brand: String!,
+    $type: String!,
+    $price: String!,
+    $artistId: String!) {
+    addArtist(id: $id,
+      year:  $year,
+      brand: $brand,
+      type: $type,
+      price: $price,
+      artistId: $artistId) {
+        id
+        year
+        brand
+        type
+        price
+        artistId
+    }
+  }
+`
+
 export const GET_ARTISTS = gql`
   {
     artists {
@@ -30,12 +66,48 @@ export const UPDATE_ARTIST = gql`
   }
 `
 
+export const UPDATE_INSTRUMENT = gql`
+  mutation UpdateInstrument($id: String!,
+    $year: String!,
+    $brand: String!,
+    $type: String!,
+    $price: String!,
+    $artistId: String!) {
+    updateArtist(id: $id,
+      year:  $year,
+      brand: $brand,
+      type: $type,
+      price: $price,
+      artistId: $artistId) {
+        id
+        year
+        brand
+        type
+        price
+        artistId
+    }
+  }
+`
+
 export const REMOVE_ARTIST = gql`
   mutation RemoveArtist($id: String!) {
     removeArtist(id: $id) {
       id
       firstName
       lastName
+    }
+  }
+`
+
+export const REMOVE_INSTRUMENT = gql`
+  mutation RemoveInstrument($id: String!) {
+    removeArtist(id: $id) {
+      id
+        year
+        brand
+        type
+        price
+        artistId
     }
   }
 `

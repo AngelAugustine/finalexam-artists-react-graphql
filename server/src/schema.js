@@ -121,7 +121,12 @@ const typeDefs = gql`
       type: String!,
       price: String!,
       artistId: String!): Instrument
-
+      updateInstrument(id: String!,
+        year: String!,
+        brand: String!,
+        type: String!,
+        price: String!,
+        artistId: String!): Instrument
     removeInstrument(id: String!): Instrument
     addArtist(id: String!, firstName: String!, lastName: String!): Artist
     updateArtist(id: String!, firstName: String!, lastName: String!): Artist
@@ -146,6 +151,18 @@ const resolvers = {
       }
       instruments.push(newInstrument)
       return newInstrument
+    },
+    updateInstrument: (root, args) => {
+      const instrument = find(instruments, { id: args.id })
+      if (!instrument) {
+        throw new Error(`Couldn't find instrument with id ${args.id}`)
+      }
+      instrument.year= args.year,
+      instrument.brand= args.brand,
+      instrument.type= args.type,
+      instrument.price= args.price,
+      instrument.artistId= args.artistId
+      return instrument
     },
     removeInstrument: (root, args) => {
       const removedInstrument = find(instruments, { id: args.id })
