@@ -10,6 +10,7 @@ import './App.css'
 import AddArtist from './components/forms/AddArtist'
 import Artist from './components/listItems/Artist'
 import Title from './components/layout/Title'
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 const client = new ApolloClient({
   link: createHttpLink({ uri: 'http://localhost:4000/graphql' }),

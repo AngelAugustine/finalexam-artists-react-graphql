@@ -5,22 +5,76 @@ import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import { v4 as uuidv4 } from 'uuid'
 
-import { ADD_CONTACT, GET_CONTACTS } from '../../queries/index'
+
+
+import { ADD_ARTIST, GET_ARTISTS } from '../../queries/index'
+import AddInstrument from './AddInstrument'
 
 const AddArtist = () => {
+
+
+  const [id] = useState(uuidv4())
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+
+  const [addContact] = useMutation(ADD_ARTIST, {
+    update(cache, { data: { addContact } }) {
+      const { artists } = cache.readQuery({ query: GET_ARTISTS })
+      cache.writeQuery({
+        query: GET_ARTISTS,
+        data: { artists: artists.concat([addContact]) }
+      })
+    }
+  })
+
   return (
-    <form>
+    <>
+    <form
+    onSubmit={e => {
+      e.preventDefault()
+      addContact({
+        variables: {
+          id,
+          firstName,
+          lastName
+        },
+        optimisticResponse: {
+          __typename: 'Mutuation',
+          addContact: {
+            __typename: 'Artist',
+            id,
+            firstName,
+            lastName
+          }
+        },
+        update: (proxy, { data: { addContact } }) => {
+          const data = proxy.readQuery({ query: GET_ARTISTS })
+          proxy.writeQuery({
+            query: GET_ARTISTS,
+            data: {
+              ...data,
+              artists: [...data.artists, addContact]
+            }
+          })
+        }
+      })
+    }}
+    >
       <TextField
         label='First Name'
+        defaultValue={firstName}
         placeholder='i.e. John'
         margin='normal'
+        onChange={e => setFirstName(e.target.value)}
         variant='outlined'
         style={{ margin: '10px' }}
       />
       <TextField
         label='Last Name'
+        defaultValue={lastName}
         placeholder='i.e. Smith'
         margin='normal'
+        onChange={e => setLastName(e.target.value)}
         variant='outlined'
         style={{ margin: '10px' }}
       />
@@ -33,6 +87,8 @@ const AddArtist = () => {
         Add Contact
       </Button>
     </form>
+    <AddInstrument />
+    </>
   )
 }
 
