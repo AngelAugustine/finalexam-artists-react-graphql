@@ -100,12 +100,29 @@ const typeDefs = gql`
     firstName: String!
     lastName: String!
   }
+  type Instrument {
+    id: String!,
+      year: String!,
+      brand: String!,
+      type: String!,
+      price: String!,
+      artistId: String!
+  }
 
   type Query {
-    artists: [Artist]
+    artists: [Artist],
+    instruments: [Instrument]
   }
 
   type Mutation {
+    addInstrument(id: String!,
+      year: String!,
+      brand: String!,
+      type: String!,
+      price: String!,
+      artistId: String!): Instrument
+
+    removeInstrument(id: String!): Instrument
     addArtist(id: String!, firstName: String!, lastName: String!): Artist
     updateArtist(id: String!, firstName: String!, lastName: String!): Artist
     removeArtist(id: String!): Artist
@@ -114,9 +131,32 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    artists: () => artists
+    artists: () => artists,
+    instruments: () => instruments
   },
   Mutation: {
+    addInstrument: (root, args) => {
+      const newInstrument = {
+        id: args.id,
+        year: args.year,
+        brand: args.brand,
+        type: args.type,
+        price: args.price,
+        artistId: args.artistId
+      }
+      instruments.push(newInstrument)
+      return newInstrument
+    },
+    removeInstrument: (root, args) => {
+      const removedInstrument = find(instruments, { id: args.id })
+      if (!removedInstrument) {
+        throw new Error(`Couldn't find instrument with id ${args.id}`)
+      }
+      remove(instruments, a => {
+        return a.id === removedInstrument.id
+      })
+      return removedInstrument
+    },
     addArtist: (root, args) => {
       const newArtist = {
         id: args.id,

@@ -21,7 +21,7 @@ const Instrument = (id) =>{
           
         
         <ListItemText>
-            angel
+            Instrument
             </ListItemText>
 
             </ListItem >

@@ -42,7 +42,9 @@ const Artist = () => {
             </ListItemText>
            
            
-          <Button variant='contained' style={{ margin: '5px' }}>
+          <Button variant='contained' 
+          
+          style={{ margin: '5px' }}>
             Edit
           </Button>
           <RemoveArtist />
